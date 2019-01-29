@@ -16,3 +16,6 @@ Same thing as this Setter and Getter methods that we use to communicate between 
 
 Setter is used to SET a private property of a class.
 Getter is used to GET a private property of a class by using return.
+
+# Final
+If a variable is being called by the inner class, i.e OnClickListener, declare the variable as final.
