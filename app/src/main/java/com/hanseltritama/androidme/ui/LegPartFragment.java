@@ -13,11 +13,14 @@ import android.widget.ImageView;
 import com.hanseltritama.androidme.R;
 import com.hanseltritama.androidme.data.AndroidImageAssets;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class LegPartFragment extends Fragment {
 
     private static final String TAG = "LegPartFragment";
+    private static final String IMAGE_LIST = "IMAGE_LIST";
+    private static final String LIST_INDEX = "LIST_INDEX";
 
     private List<Integer> mImageIds;
     private int mListIndex;
@@ -40,12 +43,31 @@ public class LegPartFragment extends Fragment {
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
 
+        if(savedInstanceState != null) {
+
+            mImageIds = savedInstanceState.getIntegerArrayList(IMAGE_LIST);
+            mListIndex = savedInstanceState.getInt(LIST_INDEX);
+
+        }
+
         View rootView = inflater.inflate(R.layout.fragment_leg_part, container, false);
-        ImageView imageView = rootView.findViewById(R.id.leg_part_image_view);
+        final ImageView imageView = rootView.findViewById(R.id.leg_part_image_view);
 
         if(mImageIds != null) {
 
             imageView.setImageResource(mImageIds.get(mListIndex));
+
+            imageView.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+
+                    if(mListIndex < mImageIds.size() - 1) mListIndex++;
+                    else mListIndex = 0;
+
+                    imageView.setImageResource(mImageIds.get(mListIndex));
+
+                }
+            });
 
         } else {
 
@@ -54,6 +76,14 @@ public class LegPartFragment extends Fragment {
         }
 
         return rootView;
+
+    }
+
+    @Override
+    public void onSaveInstanceState(@NonNull Bundle currentState) {
+
+        currentState.putIntegerArrayList(IMAGE_LIST, (ArrayList<Integer>) mImageIds);
+        currentState.putInt(LIST_INDEX, mListIndex);
 
     }
 }

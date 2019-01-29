@@ -16,24 +16,29 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_android_me);
 
-        HeadPartFragment headPartFragment = new HeadPartFragment();
-        BodyPartFragment bodyPartFragment = new BodyPartFragment();
-        LegPartFragment legPartFragment = new LegPartFragment();
 
-        headPartFragment.setImageIds(AndroidImageAssets.getHeads());
-        headPartFragment.setListIndex(2);
-        bodyPartFragment.setImageIds(AndroidImageAssets.getBodies());
-        bodyPartFragment.setListIndex(2);
-        legPartFragment.setImageIds(AndroidImageAssets.getLegs());
-        legPartFragment.setListIndex(2);
+        // only create new fragments when there is no previously saved state
+        if(savedInstanceState == null) {
 
-        FragmentManager fragmentManager = getSupportFragmentManager();
+            HeadPartFragment headPartFragment = new HeadPartFragment();
+            BodyPartFragment bodyPartFragment = new BodyPartFragment();
+            LegPartFragment legPartFragment = new LegPartFragment();
 
-        fragmentManager.beginTransaction()
-                .add(R.id.head_container, headPartFragment)
-                .add(R.id.body_container, bodyPartFragment)
-                .add(R.id.leg_container, legPartFragment)
-                .commit();
+            headPartFragment.setImageIds(AndroidImageAssets.getHeads());
+            headPartFragment.setListIndex(2);
+            bodyPartFragment.setImageIds(AndroidImageAssets.getBodies());
+            bodyPartFragment.setListIndex(2);
+            legPartFragment.setImageIds(AndroidImageAssets.getLegs());
+            legPartFragment.setListIndex(2);
+
+            FragmentManager fragmentManager = getSupportFragmentManager();
+
+            fragmentManager.beginTransaction()
+                    .add(R.id.head_container, headPartFragment)
+                    .add(R.id.body_container, bodyPartFragment)
+                    .add(R.id.leg_container, legPartFragment)
+                    .commit();
+        }
 
     }
 }
