@@ -5,6 +5,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 
 import com.hanseltritama.androidme.R;
+import com.hanseltritama.androidme.data.AndroidImageAssets;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -18,6 +19,13 @@ public class MainActivity extends AppCompatActivity {
         HeadPartFragment headPartFragment = new HeadPartFragment();
         BodyPartFragment bodyPartFragment = new BodyPartFragment();
         LegPartFragment legPartFragment = new LegPartFragment();
+
+        headPartFragment.setImageIds(AndroidImageAssets.getHeads());
+        headPartFragment.setListIndex(2);
+        bodyPartFragment.setImageIds(AndroidImageAssets.getBodies());
+        bodyPartFragment.setListIndex(2);
+        legPartFragment.setImageIds(AndroidImageAssets.getLegs());
+        legPartFragment.setListIndex(2);
 
         FragmentManager fragmentManager = getSupportFragmentManager();
 
