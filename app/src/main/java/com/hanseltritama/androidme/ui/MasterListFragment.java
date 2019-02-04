@@ -22,7 +22,7 @@ public class MasterListFragment extends Fragment{
         void onImageSelected(int position);
     }
 
-    // Attaching Fragment to its host activity
+    // To make sure that the host activity has this callback function
     @Override
     public void onAttach(Context context) {
         super.onAttach(context);
