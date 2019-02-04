@@ -7,9 +7,11 @@ import android.support.v4.app.FragmentManager;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.Button;
+import android.widget.GridView;
 import android.widget.Toast;
 
 import com.hanseltritama.androidme.R;
+import com.hanseltritama.androidme.data.AndroidImageAssets;
 
 public class ListActivity extends AppCompatActivity implements MasterListFragment.OnImageClickListener {
 
@@ -18,11 +20,54 @@ public class ListActivity extends AppCompatActivity implements MasterListFragmen
     private int bodyIndex = 0;
     private int legIndex = 0;
 
+    private boolean mTwoPane;
+
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
 
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_master_list);
+
+        // Determine between single OR two-pane
+        if(findViewById(R.id.android_me_linear_layout) != null) {
+
+            mTwoPane = true;
+
+            // Hide the Next button on Tablet view
+            Button next_button = findViewById(R.id.next_button);
+            next_button.setVisibility(View.GONE);
+
+            // Set list into 2 columns
+            GridView gridView = findViewById(R.id.body_grid_view);
+            gridView.setNumColumns(2);
+
+            if(savedInstanceState == null) {
+
+                HeadPartFragment headPartFragment = new HeadPartFragment();
+                BodyPartFragment bodyPartFragment = new BodyPartFragment();
+                LegPartFragment legPartFragment = new LegPartFragment();
+
+                headPartFragment.setImageIds(AndroidImageAssets.getHeads());
+                headPartFragment.setListIndex(headIndex);
+                bodyPartFragment.setImageIds(AndroidImageAssets.getBodies());
+                bodyPartFragment.setListIndex(bodyIndex);
+                legPartFragment.setImageIds(AndroidImageAssets.getLegs());
+                legPartFragment.setListIndex(legIndex);
+
+                FragmentManager fragmentManager = getSupportFragmentManager();
+
+                fragmentManager.beginTransaction()
+                        .add(R.id.head_container, headPartFragment)
+                        .add(R.id.body_container, bodyPartFragment)
+                        .add(R.id.leg_container, legPartFragment)
+                        .commit();
+            }
+
+        } else {
+
+            mTwoPane = false;
+
+        }
 
         MasterListFragment masterListFragment = new MasterListFragment();
 
@@ -38,12 +83,48 @@ public class ListActivity extends AppCompatActivity implements MasterListFragmen
 
         int bodyPartNumber = position / 12;
 
-        switch (bodyPartNumber) {
+        // Handle one OR two-pane device
+        if(mTwoPane) {
 
-            case 0: headIndex = position % 12; break;
-            case 1: bodyIndex = position % 12; break;
-            case 2: legIndex = position % 12; break;
-            default: break;
+            BodyPartFragment newBodyPartFragment = new BodyPartFragment();
+
+            switch (bodyPartNumber) {
+
+                case 0:
+                    newBodyPartFragment.setImageIds(AndroidImageAssets.getHeads());
+                    newBodyPartFragment.setListIndex(position % 12);
+                    getSupportFragmentManager().beginTransaction()
+                            .replace(R.id.head_container, newBodyPartFragment)
+                            .commit();
+                    break;
+                case 1:
+                    newBodyPartFragment.setImageIds(AndroidImageAssets.getHeads());
+                    newBodyPartFragment.setListIndex(position % 12);
+                    getSupportFragmentManager().beginTransaction()
+                            .replace(R.id.body_container, newBodyPartFragment)
+                            .commit();
+                    break;
+                case 2:
+                    newBodyPartFragment.setImageIds(AndroidImageAssets.getHeads());
+                    newBodyPartFragment.setListIndex(position % 12);
+                    getSupportFragmentManager().beginTransaction()
+                            .replace(R.id.leg_container, newBodyPartFragment)
+                            .commit();
+                    break;
+                default: break;
+
+            }
+
+        } else {
+
+            switch (bodyPartNumber) {
+
+                case 0: headIndex = position % 12; break;
+                case 1: bodyIndex = position % 12; break;
+                case 2: legIndex = position % 12; break;
+                default: break;
+
+            }
 
         }
 
